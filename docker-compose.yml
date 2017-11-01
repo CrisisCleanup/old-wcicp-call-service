@@ -1,0 +1,50 @@
+version: '2'
+
+volumes:
+  ccu_postgres_data_local: {}
+  ccu_postgres_backup_local: {}
+  ccu_redis_data_local: {}
+
+services:
+  postgres:
+    build:
+      context: ./compose/postgres
+      dockerfile: ./Dockerfile
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: p@ssw0rd
+    volumes:
+      - ccu_postgres_data_local:/var/lib/postgresql/data
+      - ccu_postgres_backup_local:/backups
+    ports:
+      - '5432:5432'
+  redis:
+     image: redis:3.2
+     ports:
+       - '6379:6379'
+     volumes:
+      - ccu_redis_data_local:/data
+  callservice: &callservice
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+    environment:
+      POSTGRES_USER: callservice
+      POSTGRES_PASSWORD: callservice
+      POSTGRES_DBNAME: callservice
+      DATABASE_HOST: postgres
+      USE_DOCKER: 'yes'
+    ports:
+      - "8020:8000"
+    command: /start.sh
+  callservice_celeryworker:
+    <<: *callservice
+    depends_on:
+      - redis
+      - postgres
+    ports: []
+    command: /start-celeryworker.sh

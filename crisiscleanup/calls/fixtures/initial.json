@@ -1,0 +1,30 @@
+[
+  {
+    "model": "calls.call",
+    "pk": "27269dea-24ae-48f9-ad4e-58d2e397d164",
+    "fields": {
+      "number": "333-456-7890"
+    }
+  },
+  {
+    "model": "calls.call",
+    "pk": "2cd74b4f-ceca-4365-ac4a-0bcb9aea7fb1",
+    "fields": {
+      "number": "222-456-7890"
+    }
+  },
+  {
+    "model": "calls.call",
+    "pk": "c9371320-4348-4bfb-a090-93a995e43bef",
+    "fields": {
+      "number": "111-456-7890"
+    }
+  },
+  {
+    "model": "calls.call",
+    "pk": "db82f5bd-af13-4223-81c6-b75cd0faf4fc",
+    "fields": {
+      "number": "123-456-7890"
+    }
+  }
+]

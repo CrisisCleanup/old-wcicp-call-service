@@ -1,0 +1,6 @@
+-r base.txt
+
+gevent==1.2.2
+gunicorn==19.7.1
+django-anymail==1.0
+raven==6.2.1

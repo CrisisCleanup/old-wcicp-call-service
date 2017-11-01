@@ -1,0 +1,10 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-f', './compose/kube/django/Dockerfile', '--cache-from', 'gcr.io/$PROJECT_ID/wcicp-call-service', '-t', 'gcr.io/$PROJECT_ID/wcicp-call-service', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/wcicp-call-service']
+- name: 'gcr.io/cloud-builders/kubectl'
+  args: ['delete', 'pods', '-lapp=wcicp-call-service,env=dev']
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=ccu-1'
