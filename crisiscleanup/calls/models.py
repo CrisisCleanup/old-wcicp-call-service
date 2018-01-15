@@ -21,11 +21,10 @@ class User(models.Model):
     last_used_gateway = models.ForeignKey(
         'Gateway', on_delete=models.SET_NULL, null=True)
     last_used_state = models.CharField(max_length=50, null=True)
-    # Whether or not the user's training is current
-    is_trained = models.BooleanField(default=False)
-    # Whether or not the user has been notified of any updates
-    is_up_to_date = models.BooleanField(default=False)
-
+    # A list of all articles which the user has read
+    read_articles = models.ManyToManyField('Article')
+    # A list of all training the user has completed
+    training_completed = models.ManyToManyField('TrainingModule')
     class Meta:
         db_table = 'user'
 
@@ -36,6 +35,42 @@ class User(models.Model):
 class Gateway(models.Model):
     class Meta:
         db_table = 'gateway'
+
+    def __str__(self):
+        return str(self.name)
+
+
+class Article(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=50, null=True)
+    description = models.CharField(max_length=500, null=True)
+    #TODO: Eventually will have types: Organization, Disaster, for now assume all global
+    class Meta:
+        db_table = 'article'
+
+    def __str__(self):
+        return str(self.name)
+
+
+class TrainingModule(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=50)
+    description = models.CharField(max_length=500, null=True)
+    video_path = models.CharField(max_length=100, null=True)
+    class Meta:
+        db_table = 'training_module'
+
+    def __str__(self):
+        return str(self.name)
+
+
+class TrainingQuestion(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    module = models.ForeignKey('TrainingModule')
+    question = models.CharField(max_length=100)
+    answer = models.BooleanField()
+    class Meta:
+        db_table = 'training_question'
 
     def __str__(self):
         return str(self.name)
