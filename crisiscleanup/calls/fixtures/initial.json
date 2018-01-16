@@ -26,5 +26,28 @@
     "fields": {
       "number": "123-456-7890"
     }
+  },
+  {
+    "model": "calls.user",
+    "pk": "2c275d3f-c8cc-49cb-ac8c-73fd123069ba",
+    "fields": {
+      "willing_to_receive_calls": "True"
+    }
+  },
+  {
+    "model": "calls.article",
+    "pk": "b03664c0-8b39-4779-b446-80f3cf52f902",
+    "fields": {
+      "title": "A Global Message Example 1",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    }
+  },
+    {
+    "model": "calls.article",
+    "pk": "beac97d0-64de-4e38-8744-3c3be2704584",
+    "fields": {
+      "title": "A Global Message Example 2",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    }
   }
 ]
