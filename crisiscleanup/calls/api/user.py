@@ -1,6 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import list_route
+from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
 from crisiscleanup.calls.api.serializers.user import UserSerializer
@@ -21,3 +22,11 @@ class UserViewSet(viewsets.ModelViewSet):
             'task_id': debug_task.delay().id
         }
         return Response(resp, status=status.HTTP_200_OK)
+
+    @detail_route(methods=['post'])
+    def set_read_articles(self, request, pk=None):
+        user = self.get_object()
+        #Expects a list of guids ["article1.Id","article2.Id"]
+        user.read_articles = request.data;
+        user.save()
+        return Response({'status': 'read_articles set'})
