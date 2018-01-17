@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 from crisiscleanup.calls.api.serializers.user import UserSerializer
 from crisiscleanup.calls.models import User
+from crisiscleanup.calls.models import Article
 from crisiscleanup.taskapp.celery import debug_task
 
 
@@ -27,6 +28,15 @@ class UserViewSet(viewsets.ModelViewSet):
     def set_read_articles(self, request, pk=None):
         user = self.get_object()
         #Expects a list of guids ["article1.Id","article2.Id"]
-        user.read_articles = request.data;
+        user.read_articles = request.data
         user.save()
         return Response({'status': 'read_articles set'})
+
+    @detail_route(methods=['get'])
+    def get_detail(self, request, pk=None):
+        user = self.get_object()
+        serializedData = self.get_serializer(user).data;
+        #Calculate whether or not the user's training and read articles are up-to-date
+        isUpToDate = Article.objects.count() == user.read_articles.count();
+        serializedData["is_up_to_date"] = isUpToDate;
+        return Response(serializedData)

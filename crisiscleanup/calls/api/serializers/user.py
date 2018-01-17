@@ -1,13 +1,10 @@
 from rest_framework import serializers
 
 from crisiscleanup.calls.models import User
-from crisiscleanup.calls.api.serializers.article import ArticleSerializer
-from crisiscleanup.calls.api.serializers.trainingModule import TrainingModuleSerializer
-
 
 class UserSerializer(serializers.ModelSerializer):
-    read_articles = ArticleSerializer(many=True)
-    training_completed = TrainingModuleSerializer(many=True)
+    read_articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    training_completed = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = User
