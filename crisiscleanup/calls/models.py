@@ -22,9 +22,9 @@ class User(models.Model):
         'Gateway', on_delete=models.SET_NULL, null=True)
     last_used_state = models.CharField(max_length=50, null=True)
     # A list of all articles which the user has read
-    read_articles = models.ManyToManyField('Article')
+    read_articles = models.ManyToManyField('Article', blank=True)
     # A list of all training the user has completed
-    training_completed = models.ManyToManyField('TrainingModule')
+    training_completed = models.ManyToManyField('TrainingModule', blank=True)
     class Meta:
         db_table = 'user'
 
