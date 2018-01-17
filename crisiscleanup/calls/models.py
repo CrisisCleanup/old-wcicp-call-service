@@ -12,6 +12,9 @@ class User(models.Model):
     # Id comes from a seperate API
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     willing_to_receive_calls = models.BooleanField(default=False)
+    # First and Last name 
+    first_name = models.CharField(max_length=50, null=True)
+    last_name = models.CharField(max_length=50, null=True)
     # Hero helps the other volunteers who take calls
     willing_to_be_call_hero = models.BooleanField(default=False)
     # Hero helps people fix map pins
@@ -30,7 +33,6 @@ class User(models.Model):
 
     def __str__(self):
         return str(self.name)
-
 
 class Gateway(models.Model):
     class Meta:
@@ -78,10 +80,36 @@ class TrainingQuestion(models.Model):
 
 class Call(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
-    number = models.CharField(max_length=255, null=True, blank=True)
+    caller_number = models.CharField(max_length=15, null=True, blank=True)
+    user_number = models.CharField(max_length=15, null=True, blank=True)
 
     class Meta:
         db_table = 'call'
+
+    def __str__(self):
+        return str(self.name)
+
+class Caller(models.Model):
+    # validators
+    phone_regex = RegexValidator(
+        regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+
+    # fields
+    # Id comes from a seperate API
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
+    # First and Last name 
+    first_name = models.CharField(max_length=50, null=True)
+    last_name = models.CharField(max_length=50, null=True)
+    location = models.CharField(max_length=75, null=True)
+    
+    last_used_phone_number = models.CharField(
+        validators=[phone_regex], max_length=15, blank=True)
+    last_used_gateway = models.ForeignKey(
+        'Gateway', on_delete=models.SET_NULL, null=True)
+    calls = models.ManyToManyField(Call)
+
+    class Meta:
+        db_table = 'caller'
 
     def __str__(self):
         return str(self.name)
