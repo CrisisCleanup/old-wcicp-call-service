@@ -18,7 +18,11 @@ class Migration(migrations.Migration):
             name='name',
             field=models.CharField(max_length=100, null=True),
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
+            model_name='gateway',
+            name='id',
+        ),
+        migrations.AddField(
             model_name='gateway',
             name='id',
             field=models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False),
