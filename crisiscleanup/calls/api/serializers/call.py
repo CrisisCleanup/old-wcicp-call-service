@@ -5,8 +5,9 @@ from crisiscleanup.calls.models import Call
 
 class CallSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(format='hex', read_only=True)
-    number = serializers.CharField()
+    caller_number = serializers.CharField()
+    user_number = serializers.CharField()
 
     class Meta:
         model = Call
-        fields = ('id', 'number')
+        fields = ('id', 'caller_number', 'user_number')

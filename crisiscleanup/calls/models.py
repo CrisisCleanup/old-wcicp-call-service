@@ -25,6 +25,9 @@ class User(models.Model):
     read_articles = models.ManyToManyField('Article', blank=True)
     # A list of all training the user has completed
     training_completed = models.ManyToManyField('TrainingModule', blank=True)
+    first_name = models.CharField(max_length=50, null=True)
+    last_name = models.CharField(max_length=50, null=True)
+    
     class Meta:
         db_table = 'user'
 
@@ -78,10 +81,33 @@ class TrainingQuestion(models.Model):
 
 class Call(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
-    number = models.CharField(max_length=255, null=True, blank=True)
+    caller_number = models.CharField(max_length=255, null=True, blank=True)
+    user_number = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         db_table = 'call'
+
+    def __str__(self):
+        return str(self.name)
+
+class Caller(models.Model):
+    # validators
+    phone_regex = RegexValidator(
+        regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+
+    # fields
+    # Id comes from a seperate API
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
+    phone_number = models.CharField(
+        validators=[phone_regex], max_length=15, blank=True)
+    location = models.CharField(max_length=255, null=True)
+    # A list of all calls which the caller has made
+    calls = models.ManyToManyField('Call', blank=True)
+    first_name = models.CharField(max_length=50, null=True)
+    last_name = models.CharField(max_length=50, null=True)
+    
+    class Meta:
+        db_table = 'caller'
 
     def __str__(self):
         return str(self.name)
