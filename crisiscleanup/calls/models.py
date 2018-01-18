@@ -6,7 +6,7 @@ import uuid
 class Gateway(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, null=True)
-    
+
     class Meta:
         db_table = 'gateway'
 
@@ -37,7 +37,7 @@ class User(models.Model):
     training_completed = models.ManyToManyField('TrainingModule', blank=True)
     first_name = models.CharField(max_length=50, null=True)
     last_name = models.CharField(max_length=50, null=True)
-    
+
     class Meta:
         db_table = 'user'
 
@@ -47,7 +47,7 @@ class User(models.Model):
 
 class Article(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=50, null=True)
+    title = models.CharField(max_length=100, null=True)
     description = models.CharField(max_length=500, null=True)
     #TODO: Eventually will have types: Organization, Disaster, for now assume all global
     class Meta:
@@ -59,9 +59,9 @@ class Article(models.Model):
 
 class TrainingModule(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=100)
     description = models.CharField(max_length=500, null=True)
-    video_path = models.CharField(max_length=100, null=True)
+    video_url = models.CharField(max_length=100, null=True)
     class Meta:
         db_table = 'training_module'
 
@@ -72,7 +72,7 @@ class TrainingModule(models.Model):
 class TrainingQuestion(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     module = models.ForeignKey('TrainingModule')
-    question = models.CharField(max_length=100)
+    question = models.CharField(max_length=500)
     answer = models.BooleanField()
     class Meta:
         db_table = 'training_question'
@@ -107,7 +107,7 @@ class Caller(models.Model):
     calls = models.ManyToManyField('Call', blank=True)
     first_name = models.CharField(max_length=50, null=True)
     last_name = models.CharField(max_length=50, null=True)
-    
+
     class Meta:
         db_table = 'caller'
 

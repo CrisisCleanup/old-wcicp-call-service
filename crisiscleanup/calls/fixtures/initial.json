@@ -1,33 +1,5 @@
 [
   {
-    "model": "calls.call",
-    "pk": "27269dea-24ae-48f9-ad4e-58d2e397d164",
-    "fields": {
-      "number": "333-456-7890"
-    }
-  },
-  {
-    "model": "calls.call",
-    "pk": "2cd74b4f-ceca-4365-ac4a-0bcb9aea7fb1",
-    "fields": {
-      "number": "222-456-7890"
-    }
-  },
-  {
-    "model": "calls.call",
-    "pk": "c9371320-4348-4bfb-a090-93a995e43bef",
-    "fields": {
-      "number": "111-456-7890"
-    }
-  },
-  {
-    "model": "calls.call",
-    "pk": "db82f5bd-af13-4223-81c6-b75cd0faf4fc",
-    "fields": {
-      "number": "123-456-7890"
-    }
-  },
-  {
     "model": "calls.user",
     "pk": "2c275d3f-c8cc-49cb-ac8c-73fd123069ba",
     "fields": {
@@ -44,12 +16,55 @@
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
     }
   },
-    {
+  {
     "model": "calls.article",
     "pk": "beac97d0-64de-4e38-8744-3c3be2704584",
     "fields": {
       "title": "A Global Message Example 2",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    }
+  },
+  {
+    "model": "calls.trainingModule",
+    "pk": "92156b4b-fe8d-46ec-8824-23c3df393510",
+    "fields": {
+      "title": "A Global Training Module Example Without Description",
+      "video_url": "https://www.youtube.com/embed/3wumEh8wcak"
+    }
+  },
+  {
+    "model": "calls.trainingQuestion",
+    "pk": "5d6a4d11-cc95-43e8-9f16-75771368bc88",
+    "fields": {
+      "module": "92156b4b-fe8d-46ec-8824-23c3df393510",
+      "question": "Did you watch the video?",
+      "answer": "True"
+    }
+  },
+  {
+    "model": "calls.trainingQuestion",
+    "pk": "f69cecbb-b4ec-4743-850d-65f6c266fc00",
+    "fields": {
+      "module": "92156b4b-fe8d-46ec-8824-23c3df393510",
+      "question": "Are you lying?",
+      "answer": "False"
+    }
+  },
+  {
+    "model": "calls.trainingModule",
+    "pk": "b51d8736-67c7-47ec-b3ae-fdcc62a3c430",
+    "fields": {
+      "title": "A Global Training Module Example Without Video",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    }
+  },
+  {
+    "model": "calls.trainingQuestion",
+    "pk": "decca6f7-7a2f-4a87-9f47-9bb335c2357c",
+    "fields": {
+      "module": "b51d8736-67c7-47ec-b3ae-fdcc62a3c430",
+      "question": "Did you read the text?",
+      "answer": "True"
     }
   }
 ]
