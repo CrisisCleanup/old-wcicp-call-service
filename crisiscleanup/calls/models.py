@@ -3,6 +3,16 @@ from django.core.validators import RegexValidator
 import uuid
 
 
+class Gateway(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=100, null=True)
+    
+    class Meta:
+        db_table = 'gateway'
+
+    def __str__(self):
+        return str(self.name)
+
 class User(models.Model):
     # validators
     phone_regex = RegexValidator(
@@ -18,8 +28,8 @@ class User(models.Model):
     willing_to_be_pin_hero = models.BooleanField(default=False)
     last_used_phone_number = models.CharField(
         validators=[phone_regex], max_length=15, blank=True)
-    #last_used_gateway = models.ForeignKey(
-    #    'Gateway', on_delete=models.SET_NULL, null=True)
+    last_used_gateway = models.ForeignKey(
+        'Gateway', on_delete=models.SET_NULL, null=True)
     last_used_state = models.CharField(max_length=50, null=True)
     # A list of all articles which the user has read
     read_articles = models.ManyToManyField('Article', blank=True)
@@ -30,17 +40,6 @@ class User(models.Model):
     
     class Meta:
         db_table = 'user'
-
-    def __str__(self):
-        return str(self.name)
-
-
-class Gateway(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=100, null=True)
-    
-    class Meta:
-        db_table = 'gateway'
 
     def __str__(self):
         return str(self.name)
