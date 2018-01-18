@@ -36,6 +36,9 @@ class User(models.Model):
 
 class Gateway(models.Model):
     class Meta:
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        title = models.CharField(max_length=100, null=True)
+        
         db_table = 'gateway'
 
     def __str__(self):
