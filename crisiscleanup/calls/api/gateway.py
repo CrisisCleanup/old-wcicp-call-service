@@ -3,17 +3,17 @@ from rest_framework import viewsets, filters, status
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
-from crisiscleanup.calls.api.serializers.call import CallSerializer
-from crisiscleanup.calls.models import Call
+from crisiscleanup.calls.api.serializers.gateway import GatewaySerializer
+from crisiscleanup.calls.models import Gateway
 from crisiscleanup.taskapp.celery import debug_task
 
 
-class CallViewSet(viewsets.ModelViewSet):
-    queryset = Call.objects.all()
-    serializer_class = CallSerializer
+class GatewayViewSet(viewsets.ModelViewSet):
+    queryset = Gateway.objects.all()
+    serializer_class = GatewaySerializer
     filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
-    search_fields = ('caller_number',)
-    filter_fields = ('caller_number',)
+    search_fields = ()
+    filter_fields = ()
 
     @list_route()
     def test_celery(self, request):
