@@ -15,7 +15,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
     search_fields = ()
-    filter_fields = ()
+    filter_fields = ("willing_to_be_call_hero",)
 
     @list_route()
     def test_celery(self, request):

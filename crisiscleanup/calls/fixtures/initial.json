@@ -31,7 +31,9 @@
     "model": "calls.user",
     "pk": "2c275d3f-c8cc-49cb-ac8c-73fd123069ba",
     "fields": {
-      "willing_to_receive_calls": "True"
+      "willing_to_receive_calls": "True",
+      "willing_to_be_call_hero": "True",
+      "last_used_phone_number": "888-888-8888"
     }
   },
   {
