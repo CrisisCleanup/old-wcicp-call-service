@@ -15,7 +15,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
     search_fields = ()
-    filter_fields = ("willing_to_be_call_hero",)
+    filter_fields = ("willing_to_be_call_center_support",)
 
     @list_route()
     def test_celery(self, request):
@@ -23,6 +23,11 @@ class UserViewSet(viewsets.ModelViewSet):
             'task_id': debug_task.delay().id
         }
         return Response(resp, status=status.HTTP_200_OK)
+
+    def update(self, request, *args, **kwargs):
+        #Allow partial updates
+        kwargs['partial'] = True
+        return super(UserViewSet, self).update(request, *args, **kwargs)
 
     @detail_route(methods=['post'])
     def set_read_articles(self, request, pk=None):

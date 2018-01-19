@@ -8,6 +8,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'willing_to_receive_calls', 'willing_to_be_call_hero',
+        fields = ('id', 'willing_to_receive_calls', 'willing_to_be_call_hero', 'willing_to_be_call_center_support',
                   'willing_to_be_pin_hero', 'last_used_phone_number', 'last_used_gateway', 'last_used_state',
-                  'read_articles', 'training_completed', 'first_name', 'last_name')
+                  'read_articles', 'training_completed', 'name','supported_languages')
