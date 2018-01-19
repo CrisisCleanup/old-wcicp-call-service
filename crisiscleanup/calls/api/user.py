@@ -55,8 +55,8 @@ class UserViewSet(viewsets.ModelViewSet):
     def update_detail(self, request, pk=None):
         user = self.get_object()
 
-        user.last_used_phone_number = request.data["phone"]
-        user.last_used_state = request.data["state"]
+        user.last_used_phone_number = request.data["phoneNumber"]
+        user.last_used_state = request.data["states"]
         #TODO: set gateway
         user.save()
 
