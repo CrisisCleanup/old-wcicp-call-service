@@ -21,9 +21,12 @@ class User(models.Model):
     # fields
     # Id comes from a seperate API
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
+    # Willing to receive calls related to disasters associated to their organization
     willing_to_receive_calls = models.BooleanField(default=False)
-    # Hero helps the other volunteers who take calls
+    # Hero helps with all calls outside of organization disasters
     willing_to_be_call_hero = models.BooleanField(default=False)
+    # Willing to support other call center operatives
+    willing_to_be_call_center_support = models.BooleanField(default=False)
     # Hero helps people fix map pins
     willing_to_be_pin_hero = models.BooleanField(default=False)
     last_used_phone_number = models.CharField(
@@ -35,8 +38,10 @@ class User(models.Model):
     read_articles = models.ManyToManyField('Article', blank=True)
     # A list of all training the user has completed
     training_completed = models.ManyToManyField('TrainingModule', blank=True)
-    first_name = models.CharField(max_length=50, null=True)
-    last_name = models.CharField(max_length=50, null=True)
+    # A quick reference name, master name is stored in user API
+    name = models.CharField(max_length=100, null=True)
+    #  A comma delimited list of the languages which they support calls for
+    supported_languages = models.CharField(max_length=254, null=True)
 
     class Meta:
         db_table = 'user'
