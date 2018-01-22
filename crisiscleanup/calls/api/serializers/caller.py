@@ -7,4 +7,4 @@ class CallerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Caller
-        fields = ('id', 'phone_number', 'region', 'address_street', 'address_city', 'address_state', 'address_unit', 'address_zipcode' ,'calls', 'first_name', 'last_name')
+        fields = ('id', 'phone_number', 'region', 'address_street', 'address_city', 'address_state', 'address_unit', 'address_zipcode' ,'calls', 'name')

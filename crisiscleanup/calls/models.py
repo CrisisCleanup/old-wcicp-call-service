@@ -116,8 +116,7 @@ class Caller(models.Model):
     address_zipcode = models.CharField(max_length=14, null=True)
     # A list of all calls which the caller has made
     calls = models.ManyToManyField('Call', blank=True)
-    first_name = models.CharField(max_length=50, null=True)
-    last_name = models.CharField(max_length=50, null=True)
+    name = models.CharField(max_length=100, null=True)
 
     class Meta:
         db_table = 'caller'
