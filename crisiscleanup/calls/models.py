@@ -16,7 +16,7 @@ class Gateway(models.Model):
 class User(models.Model):
     # validators
     phone_regex = RegexValidator(
-        regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+        regex=r'^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
     # fields
     # Id comes from a seperate API
@@ -90,6 +90,7 @@ class Call(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     caller_number = models.CharField(max_length=255, null=True, blank=True)
     user_number = models.CharField(max_length=255, null=True, blank=True)
+    status = models.CharField(max_length=255, null=True, blank = True)
 
     class Meta:
         db_table = 'call'
@@ -100,14 +101,19 @@ class Call(models.Model):
 class Caller(models.Model):
     # validators
     phone_regex = RegexValidator(
-        regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+        regex=r'^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
     # fields
-    # Id comes from a seperate API
+    # Id comes from a separate API
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
-    phone_number = models.CharField(
-        validators=[phone_regex], max_length=15, blank=True)
-    location = models.CharField(max_length=255, null=True)
+    phone_number = models.CharField(validators=[phone_regex], max_length=15, blank=True)
+    region = models.CharField(max_length=255, null=True)
+    # Address break down
+    address_street = models.CharField(max_length=255, null=True)
+    address_city = models.CharField(max_length=255, null=True)
+    address_state = models.CharField(max_length=50, null=True)
+    address_unit = models.CharField(max_length=255, null=True)
+    address_zipcode = models.CharField(max_length=14, null=True)
     # A list of all calls which the caller has made
     calls = models.ManyToManyField('Call', blank=True)
     first_name = models.CharField(max_length=50, null=True)

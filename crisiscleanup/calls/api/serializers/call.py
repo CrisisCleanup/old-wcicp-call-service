@@ -10,4 +10,4 @@ class CallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Call
-        fields = ('id', 'caller_number', 'user_number')
+        fields = ('id', 'caller_number', 'user_number','status')
