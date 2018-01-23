@@ -59,15 +59,3 @@ class UserViewSet(viewsets.ModelViewSet):
         serializedData["is_up_to_date"] = isUpToDate;
         serializedData["is_training_completed"] = trainingCompleted;
         return Response(serializedData)
-
-    @detail_route(methods=['put'])
-    def update_detail(self, request, pk=None):
-        user = self.get_object()
-
-        user.last_used_phone_number = request.data["phone"]
-        user.last_used_state = request.data["state"]
-        #TODO: set gateway
-        user.save()
-
-        #expects an object with phone, gateway and states
-        return Response({'status': 'user set'})
