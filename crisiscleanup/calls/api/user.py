@@ -40,8 +40,12 @@ class UserViewSet(viewsets.ModelViewSet):
     @detail_route(methods=['post'])
     def set_completed_training(self, request, pk=None):
         user = self.get_object()
-        #Expects a list of guids ["trainingModule1.Id","trainingModule2.Id"]
-        user.training_completed = request.data
+        if(isinstance(request.data, list)):
+            #Expects a list of guids ["trainingModule1.Id","trainingModule2.Id"]
+            user.training_completed = request.data
+        elif(not user.training_completed.filter(pk=request.data).exists()):
+            #Add the training if they haven't already completed it
+            user.training_completed.add(request.data)
         user.save()
         return Response({'status': 'training_completed set'})
 
