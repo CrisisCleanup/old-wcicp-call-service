@@ -6,6 +6,7 @@ import uuid
 class Gateway(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     agent_id = models.IntegerField(null=True)
+    gate_id = models.IntegerField(null=True)
     name = models.CharField(max_length=100, null=True)
     agent_username = models.CharField(max_length=100, null=True)
     agent_password = models.CharField(max_length=100, null=True)
