@@ -75,7 +75,7 @@
             "agent_username": "UW211",
             "agent_password": "bigflood2015",
             "name": "CCU Gateway 1",
-            "external_gate_id": "109989"
+            "external_gateway_id": "109989"
         }
     },
     {
@@ -85,17 +85,7 @@
             "agent_username": "americorps",
             "agent_password": "bigflood2017",
             "name": "CCU Gateway 2",
-            "external_gate_id": "114659"
-        }
-    },
-    {
-        "model": "calls.gateway",
-        "pk": "39ea5f4c-be62-416a-b120-f4d0282ee380",
-        "fields": {
-            "agent_username": "spanishamericorps",
-            "agent_password": "bigflood2017",
-            "name": "CCU Gateway 2",
-            "external_gate_id": "114659"
+            "external_gateway_id": "114659"
         }
     }
 ]
