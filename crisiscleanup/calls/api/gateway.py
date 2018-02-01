@@ -29,3 +29,16 @@ class GatewayViewSet(viewsets.ModelViewSet):
         serializedData = self.get_serializer(gateway).data;
         #Calculate whether or not the user's training and read articles are up-to-date
         return Response(serializedData)
+
+    def update(self, request, pk=None):
+        gateway = self.get_object()
+        serializer = GatewaySerializer(gateway, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk=None):
+        gateway = self.get_object()
+        gateway.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

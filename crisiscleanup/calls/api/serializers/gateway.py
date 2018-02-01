@@ -5,4 +5,4 @@ from crisiscleanup.calls.models import Gateway
 class GatewaySerializer(serializers.ModelSerializer):
     class Meta:
         model = Gateway
-        fields = ('id','agent_id', 'name', 'agent_username', 'agent_password', 'gate_id')
+        fields = ('id','external_gateway_id', 'name', 'agent_username', 'agent_password', 'active')
