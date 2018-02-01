@@ -72,33 +72,30 @@
         "model": "calls.gateway",
         "pk": "9ce917c1-f22c-41c8-8acd-fce6db67972c",
         "fields": {
-            "agent_id": "1474389",
             "agent_username": "UW211",
             "agent_password": "bigflood2015",
             "name": "CCU Gateway 1",
-            "gate_id": "109989"
+            "external_gate_id": "109989"
         }
     },
     {
         "model": "calls.gateway",
         "pk": "bbc9df45-434b-4fc3-a161-95737634ff50",
         "fields": {
-            "agent_id": "1480331",
             "agent_username": "americorps",
             "agent_password": "bigflood2017",
             "name": "CCU Gateway 2",
-            "gate_id": "114659"
+            "external_gate_id": "114659"
         }
     },
     {
         "model": "calls.gateway",
         "pk": "39ea5f4c-be62-416a-b120-f4d0282ee380",
         "fields": {
-            "agent_id": "1527689",
             "agent_username": "spanishamericorps",
             "agent_password": "bigflood2017",
             "name": "CCU Gateway 2",
-            "gate_id": "114659"
+            "external_gate_id": "114659"
         }
     }
 ]
