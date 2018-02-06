@@ -41,6 +41,6 @@ class ArticleViewSet(viewsets.ModelViewSet):
             try:
                 article = qs.get(pk = id)
                 article.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
             except Article.DoesNotExist:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_204_NO_CONTENT)

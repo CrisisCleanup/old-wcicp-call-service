@@ -32,3 +32,15 @@ class TrainingModuleViewSet(viewsets.ModelViewSet):
         questions = TrainingQuestion.objects.filter(module=trainingModule)
         serializedData["questions"] = TrainingQuestionSerializer(questions, many=True).data;
         return Response(serializedData)
+
+    @list_route(methods=['post'])
+    def bulk_delete(self, request):
+        qs = self.get_queryset()
+        #Expects a list of guids ["id","id"]
+        for id in request.data:
+            try:
+                item = qs.get(pk = id)
+                item.delete()
+            except TrainingModule.DoesNotExist:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -21,3 +21,14 @@ class TrainingQuestionViewSet(viewsets.ModelViewSet):
             'task_id': debug_task.delay().id
         }
         return Response(resp, status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        bulk = isinstance(request.data, list)
+
+        if not bulk:
+            return super(TrainingQuestionViewSet, self).create(request, *args, **kwargs)
+        else:
+            serializer = self.get_serializer(data=request.data, many=True)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
