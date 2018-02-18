@@ -1,4 +1,6 @@
 from rest_framework import routers
+from django.conf.urls import url
+from . import views
 
 from crisiscleanup.calls.api.call import CallViewSet
 from crisiscleanup.calls.api.user import UserViewSet
@@ -18,4 +20,5 @@ router.register(r'trainingModules', TrainingModuleViewSet)
 router.register(r'trainingQuestions', TrainingQuestionViewSet)
 
 urlpatterns = [
+    url(r'^connect-first/inbound$', views.connect_first_inbound, name="connect-first-inbound"), 
 ]

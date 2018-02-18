@@ -127,3 +127,28 @@ class Caller(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+class ConnectFirstEvent(models.Model):
+    uii = models.CharField(max_length=30) # CF manual specifies these are 30 chars
+    call_start = models.CharField(max_length=100)
+    enqueue_time = models.CharField(max_length=30)
+    dequeue_time = models.CharField(max_length=30)
+    queue_duration = models.CharField(max_length=30)
+    ani = models.CharField(max_length=30)
+    dnis = models.CharField(max_length=30)
+    outbound_disposition = models.CharField(max_length=50)
+    duration = models.CharField(max_length=30)
+    gate_id = models.CharField(max_length=30)
+    gate_name = models.CharField(max_length=30)
+    recording_url = models.CharField(max_length=500)
+    agent_id = models.CharField(max_length=30)
+    agent_username = models.CharField(max_length=30)
+    agent_phone = models.CharField(max_length=100)
+    agent_disposition = models.CharField(max_length=30)
+    sess_duration = models.CharField(max_length=30)
+    agent_externid = models.CharField(max_length=50)
+    agent_notes = models.TextField()
+
+    def __str__(self):
+        return str(self.id)
+
