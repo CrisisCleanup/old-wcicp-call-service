@@ -38,6 +38,7 @@ services:
       POSTGRES_DBNAME: callservice
       DATABASE_HOST: postgres
       USE_DOCKER: 'yes'
+      DJANGO_READ_DOT_ENV_FILE: 'true'
     ports:
       - "8020:8000"
     command: /start.sh

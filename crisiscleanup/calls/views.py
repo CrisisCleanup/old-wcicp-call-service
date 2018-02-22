@@ -3,10 +3,13 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.core import serializers
+from django.core.exceptions import PermissionDenied
 
 from .models import ConnectFirstEvent
 
 import json
+import os
+import base64
 
 
 # Create your views here.
@@ -14,8 +17,19 @@ import json
 @csrf_exempt
 @require_POST
 def connect_first_inbound(request):
-    # TODO: Verify HTTP Basic auth (with username/password in secrets/env vars)
-    # Decode base64 auth header
+    username = os.environ.get('CONNECT_FIRST_USERNAME')
+    password = os.environ.get('CONNECT_FIRST_PASSWORD')
+
+    uname = None
+    passwd = None
+    if 'HTTP_AUTHORIZATION' in request.META:
+        auth = request.META['HTTP_AUTHORIZATION'].split()
+        if len(auth) == 2:
+            if auth[0].lower() == "basic":
+                uname, passwd = base64.b64decode(auth[1]).decode('ascii').split(':')
+
+    if uname != username or passwd != password:
+        raise PermissionDenied
 
     event = ConnectFirstEvent()
 
