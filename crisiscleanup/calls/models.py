@@ -1,7 +1,18 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from .utils import ChoiceEnum
 import uuid
 
+
+class Language(models.Model):
+    name = models.CharField(max_length=50)
+    code = models.CharField(max_length=10)
+
+    class Meta:
+        db_table = 'language'
+    
+    def __str__(self):
+        return str(self.name)
 
 class Gateway(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -10,6 +21,7 @@ class Gateway(models.Model):
     agent_username = models.CharField(max_length=100, null=True)
     agent_password = models.CharField(max_length=100, null=True)
     active = models.BooleanField(default=True)
+    language = models.ForeignKey('Language')
 
     class Meta:
         db_table = 'gateway'
@@ -23,7 +35,7 @@ class User(models.Model):
         regex=r'^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
     # fields
-    # Id comes from a seperate API
+    # Id comes from a seperate API, so overriding the default here
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     # Willing to receive calls related to disasters associated to their organization
     willing_to_receive_calls = models.BooleanField(default=False)
@@ -35,9 +47,9 @@ class User(models.Model):
     willing_to_be_pin_hero = models.BooleanField(default=False)
     last_used_phone_number = models.CharField(
         validators=[phone_regex], max_length=15, blank=True)
-    gateway = models.ForeignKey(
+    last_used_gateway = models.ForeignKey(
         'Gateway', on_delete=models.SET_NULL, null=True)
-    last_used_state = models.CharField(max_length=50, null=True)
+    last_used_state = models.CharField(max_length=50, blank=True, null=True)
     # A list of all articles which the user has read
     read_articles = models.ManyToManyField('Article', blank=True)
     # A list of all training the user has completed
@@ -45,7 +57,7 @@ class User(models.Model):
     # A quick reference name, master name is stored in user API
     name = models.CharField(max_length=100, null=True)
     #  A comma delimited list of the languages which they support calls for
-    supported_languages = models.CharField(max_length=254, null=True)
+    languages = models.ManyToManyField('Language')
 
     class Meta:
         db_table = 'user'
@@ -63,7 +75,7 @@ class Article(models.Model):
         db_table = 'article'
 
     def __str__(self):
-        return str(self.name)
+        return str(self.title)
 
 
 class TrainingModule(models.Model):
@@ -75,7 +87,7 @@ class TrainingModule(models.Model):
         db_table = 'training_module'
 
     def __str__(self):
-        return str(self.name)
+        return str(self.title)
 
 
 class TrainingQuestion(models.Model):
@@ -87,17 +99,46 @@ class TrainingQuestion(models.Model):
         db_table = 'training_question'
 
     def __str__(self):
-        return str(self.name)
+        return str(self.question)
 
+class CallType(ChoiceEnum):
+    UNKNOWN = 'Unknown'
+    INBOUND_MISSED = 'Inbound Missed'
+    INBOUND_ANSWERED = 'Inbound Answered'
+    OUTBOUND = 'Outbound'
 
 class Call(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
-    caller_number = models.CharField(max_length=255, null=True, blank=True)
+    call_start = models.DateTimeField()
+    duration = models.PositiveIntegerField()
+    # The person calling in to CC or who we are calling
+    caller = models.ForeignKey('Caller')
+    gateway = models.ForeignKey('Gateway')
+    # The number of the CC volunteer
     user_number = models.CharField(max_length=255, null=True, blank=True)
-    status = models.CharField(max_length=255, null=True, blank = True)
+    # The (probably toll-free) CC number
+    ccu_number = models.CharField(max_length=255, null=True, blank=True)
+    # Connect First ID (uii)
+    external_id = models.CharField(max_length=30)
+    call_type = models.CharField(max_length=30, choices=CallType.choices(), default=CallType.UNKNOWN)
+    # Call disposition/status from translations.json file
+    call_result = models.CharField(max_length=255, null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
+    language = models.ForeignKey('Language')
 
     class Meta:
         db_table = 'call'
+
+    def __str__(self):
+        return 'Call to/from {} at {}'.format(caller.phone_number, call_start)
+
+class CallWorksite(models.Model):
+    """Records which worksite(s) a call was about
+    """
+    call = models.ForeignKey('Call', on_delete=models.CASCADE)
+    worksite = models.UUIDField()
+
+    class Meta:
+        db_table = 'call_worksite'
 
     def __str__(self):
         return str(self.name)
@@ -110,17 +151,10 @@ class Caller(models.Model):
     # fields
     # Id comes from a separate API
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
+    name = models.CharField(max_length=100, null=True)
     phone_number = models.CharField(validators=[phone_regex], max_length=15, blank=True)
     region = models.CharField(max_length=255, null=True)
-    # Address break down
-    address_street = models.CharField(max_length=255, null=True)
-    address_city = models.CharField(max_length=255, null=True)
-    address_state = models.CharField(max_length=50, null=True)
-    address_unit = models.CharField(max_length=255, null=True)
-    address_zipcode = models.CharField(max_length=14, null=True)
-    # A list of all calls which the caller has made
-    calls = models.ManyToManyField('Call', blank=True)
-    name = models.CharField(max_length=100, null=True)
+    preferred_language = models.ForeignKey('Language')
 
     class Meta:
         db_table = 'caller'
@@ -128,26 +162,47 @@ class Caller(models.Model):
     def __str__(self):
         return str(self.name)
 
+class CallerWorksite(models.Model):
+    """Records to which worksite(s) a caller is associated
+    """
+    caller = models.ForeignKey('Caller', on_delete=models.CASCADE)
+    worksite = models.UUIDField()
+
+    class Meta:
+        db_table = 'caller_worksite'
+
+    def __str__(self):
+        return str(self.name)
+
+class ConnectFirstCallResult(ChoiceEnum):
+    UNKNOWN = 'Unknown'
+    CONNECTED = 'Connected'
+    ABANDON = 'Abandoned'
+    DEFLECTED = 'Deflected'
+
 class ConnectFirstEvent(models.Model):
     uii = models.CharField(max_length=30) # CF manual specifies these are 30 chars
-    call_start = models.CharField(max_length=100)
-    enqueue_time = models.CharField(max_length=30)
-    dequeue_time = models.CharField(max_length=30)
+    call_start = models.DateTimeField()
+    enqueue_time = models.DateTimeField()
+    dequeue_time = models.DateTimeField()
     queue_duration = models.CharField(max_length=30)
     ani = models.CharField(max_length=30)
     dnis = models.CharField(max_length=30)
     outbound_disposition = models.CharField(max_length=50)
-    duration = models.CharField(max_length=30)
+    duration = models.PositiveIntegerField()
     gate_id = models.CharField(max_length=30)
     gate_name = models.CharField(max_length=30)
     recording_url = models.CharField(max_length=500)
     agent_id = models.CharField(max_length=30)
     agent_username = models.CharField(max_length=30)
-    agent_phone = models.CharField(max_length=100)
+    agent_phone = models.CharField(max_length=300)
     agent_disposition = models.CharField(max_length=30)
-    sess_duration = models.CharField(max_length=30)
+    sess_duration = models.PositiveIntegerField()
     agent_externid = models.CharField(max_length=50)
     agent_notes = models.TextField()
+    call_result = models.CharField(max_length=100, choices=ConnectFirstCallResult.choices(), default=ConnectFirstCallResult.UNKNOWN)
+    class Meta:
+        db_table = 'connectfirst_event'
 
     def __str__(self):
         return str(self.id)

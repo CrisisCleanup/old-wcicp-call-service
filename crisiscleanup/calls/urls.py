@@ -9,6 +9,7 @@ from crisiscleanup.calls.api.gateway import GatewayViewSet
 from crisiscleanup.calls.api.article import ArticleViewSet
 from crisiscleanup.calls.api.trainingModule import TrainingModuleViewSet
 from crisiscleanup.calls.api.trainingQuestion import TrainingQuestionViewSet
+from crisiscleanup.calls.api.language import LanguageViewSet
 
 router = routers.SimpleRouter()
 router.register(r'calls', CallViewSet)
@@ -18,6 +19,7 @@ router.register(r'gateways', GatewayViewSet)
 router.register(r'articles', ArticleViewSet)
 router.register(r'trainingModules', TrainingModuleViewSet)
 router.register(r'trainingQuestions', TrainingQuestionViewSet)
+router.register(r'languages', LanguageViewSet)
 
 urlpatterns = [
     url(r'^connect-first/inbound$', views.connect_first_inbound, name="connect-first-inbound"), 

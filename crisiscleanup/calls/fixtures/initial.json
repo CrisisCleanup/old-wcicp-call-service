@@ -1,4 +1,62 @@
-[{
+[
+    {
+        "model": "calls.language",
+        "pk": 1,
+        "fields": {
+            "name": "English",
+            "code": "en"
+        }
+    },
+    {
+        "model": "calls.language",
+        "pk": 2,
+        "fields": {
+            "name": "Spanish",
+            "code": "es"
+        }
+    },
+    {
+        "model": "calls.language",
+        "pk": 3,
+        "fields": {
+            "name": "Mandarin",
+            "code": "zh"
+        }
+    },
+    {
+        "model": "calls.gateway",
+        "pk": "8bf917c1-f22c-41c8-8acd-fce6db67961d",
+        "fields": {
+            "agent_username": "--FILLIN--",
+            "agent_password": "--FILLIN--",
+            "name": "CCU Integration Testing Gateway",
+            "external_gateway_id": "119169",
+            "language": 1
+        }
+    },
+    {
+        "model": "calls.gateway",
+        "pk": "9ce917c1-f22c-41c8-8acd-fce6db67972c",
+        "fields": {
+            "agent_username": "--FILLIN--",
+            "agent_password": "--FILLIN--",
+            "name": "CCU Gateway 1",
+            "external_gateway_id": "109989",
+            "language": 1
+        }
+    },
+    {
+        "model": "calls.gateway",
+        "pk": "bbc9df45-434b-4fc3-a161-95737634ff50",
+        "fields": {
+            "agent_username": "--FILLIN--",
+            "agent_password": "--FILLIN--",
+            "name": "CCU Gateway 2",
+            "external_gateway_id": "114659",
+            "language": 1
+        }
+    },
+    {
         "model": "calls.user",
         "pk": "2c275d3f-c8cc-49cb-ac8c-73fd123069ba",
         "fields": {
@@ -6,7 +64,8 @@
             "willing_to_be_call_hero": "True",
             "last_used_phone_number": "888-888-8888",
             "name": "Sean Fisher",
-            "gateway": "9ce917c1-f22c-41c8-8acd-fce6db67972c"
+            "gateway": "9ce917c1-f22c-41c8-8acd-fce6db67972c",
+            "languages": [ 1, 2 ]
         }
     },
     {
@@ -66,26 +125,6 @@
             "module": "b51d8736-67c7-47ec-b3ae-fdcc62a3c430",
             "question": "Did you read the text?",
             "answer": "True"
-        }
-    },
-    {
-        "model": "calls.gateway",
-        "pk": "9ce917c1-f22c-41c8-8acd-fce6db67972c",
-        "fields": {
-            "agent_username": "UW211",
-            "agent_password": "bigflood2015",
-            "name": "CCU Gateway 1",
-            "external_gateway_id": "109989"
-        }
-    },
-    {
-        "model": "calls.gateway",
-        "pk": "bbc9df45-434b-4fc3-a161-95737634ff50",
-        "fields": {
-            "agent_username": "americorps",
-            "agent_password": "bigflood2017",
-            "name": "CCU Gateway 2",
-            "external_gateway_id": "114659"
         }
     }
 ]
