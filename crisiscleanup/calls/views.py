@@ -46,11 +46,11 @@ def connect_first_inbound(request):
     event.call_start =  timezone.localize(datetime.strptime(call_start, date_format), is_dst=None)
     event.enqueue_time = timezone.localize(datetime.strptime(enqueue_time, date_format), is_dst=None)
     event.dequeue_time = timezone.localize(datetime.strptime(dequeue_time, date_format), is_dst=None)
-    event.queue_duration = request.POST.get('queue_duration', "")
+    event.queue_duration = request.POST.get('queue_duration', 0) or 0
     event.ani = request.POST.get('ani', "")
     event.dnis = request.POST.get('dnis', "")
     event.outbound_disposition = request.POST.get('outbound_disposition', "")
-    event.duration = request.POST.get('duration', "")
+    event.duration = request.POST.get('duration', 0) or 0
     event.gate_id = request.POST.get('gate_id', "")
     event.gate_name = request.POST.get('gate_name', "")
     event.recording_url = request.POST.get('recording_url', "")
@@ -58,12 +58,12 @@ def connect_first_inbound(request):
     event.agent_username = request.POST.get('agent_username', "")
     event.agent_phone = request.POST.get('agent_phone', "")
     event.agent_disposition = request.POST.get('agent_disposition', "")
-    event.sess_duration = request.POST.get('sess_duration', "")
+    event.sess_duration = request.POST.get('sess_duration', 0) or 0
     event.agent_externid = request.POST.get('agent_externid', "")
     event.agent_notes = request.POST.get('agent_notes', "")
     event.call_result = request.POST.get('call_result', "")
 
     event.save()
-
+    event.save_call()
 
     return HttpResponse(serializers.serialize("json", [event]))

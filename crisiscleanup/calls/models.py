@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import RegexValidator
-from .utils import ChoiceEnum
 import uuid
 
 
@@ -101,17 +100,21 @@ class TrainingQuestion(models.Model):
     def __str__(self):
         return str(self.question)
 
-class CallType(ChoiceEnum):
-    UNKNOWN = 'Unknown'
-    INBOUND_MISSED = 'Inbound Missed'
-    INBOUND_ANSWERED = 'Inbound Answered'
-    OUTBOUND = 'Outbound'
-
 class Call(models.Model):
+    UNKNOWN = 'UNKNOWN'
+    INBOUND_MISSED = 'INBOUND_MISSED'
+    INBOUND_ANSWERED = 'INBOUND_ANSWERED'
+    OUTBOUND = 'OUTBOUND'
+    CALL_TYPE_CHOICES = (
+        (UNKNOWN, 'Unknown'),
+        (INBOUND_MISSED, 'Inbound Missed'),
+        (INBOUND_ANSWERED, 'Inbound Answered'),
+        (OUTBOUND, 'Outbound')
+    )
     call_start = models.DateTimeField()
     duration = models.PositiveIntegerField()
     # The person calling in to CC or who we are calling
-    caller = models.ForeignKey('Caller')
+    caller = models.ForeignKey('Caller', null=True, blank=True)
     gateway = models.ForeignKey('Gateway')
     # The number of the CC volunteer
     user_number = models.CharField(max_length=255, null=True, blank=True)
@@ -119,11 +122,11 @@ class Call(models.Model):
     ccu_number = models.CharField(max_length=255, null=True, blank=True)
     # Connect First ID (uii)
     external_id = models.CharField(max_length=30)
-    call_type = models.CharField(max_length=30, choices=CallType.choices(), default=CallType.UNKNOWN)
+    call_type = models.CharField(max_length=30, choices=CALL_TYPE_CHOICES, default=UNKNOWN)
     # Call disposition/status from translations.json file
     call_result = models.CharField(max_length=255, null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
-    language = models.ForeignKey('Language')
+    language = models.ForeignKey('Language', null=True, blank=True)
 
     class Meta:
         db_table = 'call'
@@ -151,10 +154,10 @@ class Caller(models.Model):
     # fields
     # Id comes from a separate API
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
-    name = models.CharField(max_length=100, null=True)
+    name = models.CharField(max_length=100, null=True, blank=True)
     phone_number = models.CharField(validators=[phone_regex], max_length=15, blank=True)
-    region = models.CharField(max_length=255, null=True)
-    preferred_language = models.ForeignKey('Language')
+    region = models.CharField(max_length=255, null=True, blank=True)
+    preferred_language = models.ForeignKey('Language', null=True, blank=True)
 
     class Meta:
         db_table = 'caller'
@@ -174,22 +177,27 @@ class CallerWorksite(models.Model):
     def __str__(self):
         return str(self.name)
 
-class ConnectFirstCallResult(ChoiceEnum):
-    UNKNOWN = 'Unknown'
-    CONNECTED = 'Connected'
-    ABANDON = 'Abandoned'
-    DEFLECTED = 'Deflected'
-
 class ConnectFirstEvent(models.Model):
+    UNKNOWN = 'UNKNOWN'
+    CONNECTED = 'CONNECTED'
+    ABANDON = 'ABANDON'
+    DEFLECTED = 'DEFLECTED'
+    CALL_RESULT_CHOICES = (
+        (UNKNOWN, 'Unknown'),
+        (CONNECTED, 'Connected'),
+        (ABANDON, 'Abandoned'),
+        (DEFLECTED, 'Deflected')
+    )
+
     uii = models.CharField(max_length=30) # CF manual specifies these are 30 chars
     call_start = models.DateTimeField()
     enqueue_time = models.DateTimeField()
     dequeue_time = models.DateTimeField()
-    queue_duration = models.CharField(max_length=30)
+    queue_duration = models.PositiveIntegerField(null=True, blank=True)
     ani = models.CharField(max_length=30)
     dnis = models.CharField(max_length=30)
     outbound_disposition = models.CharField(max_length=50)
-    duration = models.PositiveIntegerField()
+    duration = models.PositiveIntegerField(null=True, blank=True)
     gate_id = models.CharField(max_length=30)
     gate_name = models.CharField(max_length=30)
     recording_url = models.CharField(max_length=500)
@@ -197,13 +205,38 @@ class ConnectFirstEvent(models.Model):
     agent_username = models.CharField(max_length=30)
     agent_phone = models.CharField(max_length=300)
     agent_disposition = models.CharField(max_length=30)
-    sess_duration = models.PositiveIntegerField()
+    sess_duration = models.PositiveIntegerField(null=True, blank=True)
     agent_externid = models.CharField(max_length=50)
     agent_notes = models.TextField()
-    call_result = models.CharField(max_length=100, choices=ConnectFirstCallResult.choices(), default=ConnectFirstCallResult.UNKNOWN)
+    call_result = models.CharField(max_length=100, choices=CALL_RESULT_CHOICES, default=UNKNOWN)
     class Meta:
         db_table = 'connectfirst_event'
 
     def __str__(self):
         return str(self.id)
+
+    def save_call(self):
+        caller = Caller.objects.filter(phone_number=self.ani).first()
+        if caller is None:
+            caller = Caller.objects.create(phone_number=self.ani)
+
+        gateway = Gateway.objects.filter(external_gateway_id=self.gate_id).first()
+        if gateway is None:
+            gateway = Gateway.objects.create(external_gateway_id=self.gate_id, name=self.gate_name)
+
+        call = Call(
+            call_start = self.call_start,
+            duration = self.duration,
+            caller = caller,
+            gateway = gateway,
+            ccu_number = self.dnis,
+            external_id = self.uii
+        )
+
+        if (self.call_result == ConnectFirstEvent.ABANDON or self.call_result == ConnectFirstEvent.DEFLECTED):
+            call.call_type = Call.INBOUND_MISSED
+        else:
+            call.call_type = Call.INBOUND_ANSWERED
+
+        call.save()
 

@@ -111,7 +111,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='call',
             name='call_type',
-            field=models.CharField(choices=[('UNKNOWN', 'Unknown'), ('INBOUND_MISSED', 'Inbound Missed'), ('INBOUND_ANSWERED', 'Inbound Answered'), ('OUTBOUND', 'Outbound')], default=crisiscleanup.calls.models.CallType('Unknown'), max_length=30),
+            field=models.CharField(choices=[('UNKNOWN', 'Unknown'), ('INBOUND_MISSED', 'Inbound Missed'), ('INBOUND_ANSWERED', 'Inbound Answered'), ('OUTBOUND', 'Outbound')], default=crisiscleanup.calls.models.Call.UNKNOWN, max_length=30),
         ),
         migrations.AddField(
             model_name='call',
@@ -154,7 +154,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='connectfirstevent',
             name='call_result',
-            field=models.CharField(choices=[('UNKNOWN', 'Unknown'), ('CONNECTED', 'Connected'), ('ABANDON', 'Abandoned'), ('DEFLECTED', 'Deflected')], default=crisiscleanup.calls.models.ConnectFirstCallResult('Unknown'), max_length=100),
+            field=models.CharField(choices=[('UNKNOWN', 'Unknown'), ('CONNECTED', 'Connected'), ('ABANDON', 'Abandoned'), ('DEFLECTED', 'Deflected')], default=crisiscleanup.calls.models.ConnectFirstEvent.UNKNOWN, max_length=100),
         ),
         migrations.AddField(
             model_name='call',
