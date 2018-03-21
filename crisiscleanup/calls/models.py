@@ -222,7 +222,8 @@ class ConnectFirstEvent(models.Model):
 
         gateway = Gateway.objects.filter(external_gateway_id=self.gate_id).first()
         if gateway is None:
-            gateway = Gateway.objects.create(external_gateway_id=self.gate_id, name=self.gate_name)
+            language = Language.objects.filter(code="en").first()
+            gateway = Gateway.objects.create(external_gateway_id=self.gate_id, name=self.gate_name, language=language)
 
         call = Call(
             call_start = self.call_start,
