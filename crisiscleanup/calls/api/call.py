@@ -12,8 +12,6 @@ class CallViewSet(viewsets.ModelViewSet):
     queryset = Call.objects.all()
     serializer_class = CallSerializer
     filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
-    search_fields = ('caller_number',)
-    filter_fields = ('caller_number',)
 
     @list_route()
     def test_celery(self, request):
