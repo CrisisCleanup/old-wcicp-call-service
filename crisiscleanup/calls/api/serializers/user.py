@@ -1,12 +1,11 @@
 from rest_framework import serializers
-from pprint import pprint
-
-from crisiscleanup.calls.models import User, Language
+from crisiscleanup.calls.models import User, Language, Gateway
 
 class UserSerializer(serializers.ModelSerializer):
     read_articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     training_completed = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     languages = serializers.PrimaryKeyRelatedField(many=True, queryset=Language.objects.all())
+    last_used_gateway = serializers.PrimaryKeyRelatedField(queryset=Gateway.objects)
 
     class Meta:
         model = User
