@@ -31,7 +31,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return super(UserViewSet, self).update(request, *args, **kwargs)
 
     @detail_route(methods=['post'])
-    def set_read_articles(self, request, pk=None):
+    def set_read_articles(self, request, cc_id=None):
         user = self.get_object()
         #Expects a list of guids ["article1.Id","article2.Id"]
         user.read_articles = request.data
@@ -39,7 +39,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response({'status': 'read_articles set'})
 
     @detail_route(methods=['post'])
-    def set_completed_training(self, request, pk=None):
+    def set_completed_training(self, request, cc_id=None):
         user = self.get_object()
         if(isinstance(request.data, list)):
             #Expects a list of guids ["trainingModule1.Id","trainingModule2.Id"]
