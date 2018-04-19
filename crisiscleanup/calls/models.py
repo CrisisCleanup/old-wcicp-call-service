@@ -9,7 +9,7 @@ class Language(models.Model):
 
     class Meta:
         db_table = 'language'
-    
+
     def __str__(self):
         return str(self.name)
 
@@ -121,7 +121,7 @@ class Call(models.Model):
     # The (probably toll-free) CC number
     ccu_number = models.CharField(max_length=255, null=True, blank=True)
     # Connect First ID (uii)
-    external_id = models.CharField(max_length=30)
+    external_id = models.CharField(max_length=30, unique=True)
     call_type = models.CharField(max_length=30, choices=CALL_TYPE_CHOICES, default=UNKNOWN)
     # Call disposition/status from translations.json file
     call_result = models.CharField(max_length=255, null=True, blank=True)
@@ -152,10 +152,10 @@ class Caller(models.Model):
         regex=r'^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
     # fields
-    # Id comes from a separate API
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, null=True, blank=True)
-    phone_number = models.CharField(validators=[phone_regex], max_length=15, blank=True)
+    # Unique by phone number
+    phone_number = models.CharField(validators=[phone_regex], max_length=15, blank=True, unique=True)
     region = models.CharField(max_length=255, null=True, blank=True)
     preferred_language = models.ForeignKey('Language', null=True, blank=True)
 

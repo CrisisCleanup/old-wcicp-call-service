@@ -1,12 +1,13 @@
 from django.contrib import admin
-from .models import ConnectFirstEvent, Gateway, Call, Language, User
+from .models import ConnectFirstEvent, Gateway, Call, Language, User, Caller
 
 admin_sites = [
     ConnectFirstEvent,
     Gateway,
     Call,
     Language,
-    User
+    User,
+    Caller
 ]
 
 # Register your models here.

@@ -5,15 +5,16 @@ from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
 from crisiscleanup.calls.api.serializers.caller import CallerSerializer
-from crisiscleanup.calls.models import Caller
-from crisiscleanup.calls.models import Call
+from crisiscleanup.calls.api.serializers.call import CallSerializer
+from crisiscleanup.calls.models import Caller, Call
 from crisiscleanup.taskapp.celery import debug_task
 
 
 class CallerViewSet(viewsets.ModelViewSet):
     queryset = Caller.objects.all()
     serializer_class = CallerSerializer
-    filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend)
+    lookup_field = 'phone_number' # Instead of performing get with ids use the phone number
     search_fields = ()
     filter_fields = ()
 
@@ -26,10 +27,10 @@ class CallerViewSet(viewsets.ModelViewSet):
 
 
     @detail_route(methods=['get'])
-    def get_detail(self, request, pk=None):
+    def get_detail(self, request, phone_number):
         caller = self.get_object()
         serializedData = self.get_serializer(caller).data;
-        #Calculate 
+        previousCalls = Call.objects.filter(caller=caller)
+        serializedData["previousCalls"] = CallSerializer(previousCalls, many=True).data;
+        #TODO: Grab other information
         return Response(serializedData)
-    
-    
