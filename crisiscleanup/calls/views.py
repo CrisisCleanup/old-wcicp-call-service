@@ -30,7 +30,7 @@ def connect_first_inbound(request):
             if auth[0].lower() == "basic":
                 uname, passwd = base64.b64decode(auth[1]).decode('ascii').split(':')
 
-    if uname != username or passwd != password:
+    if uname != username or passwd != password or uname == None or passwd == None:
         raise PermissionDenied
 
     min_date = '0001-01-01 00:00:00'
@@ -43,6 +43,8 @@ def connect_first_inbound(request):
     event = ConnectFirstEvent()
 
     event.uii = request.POST.get('uii', "")
+
+    # TODO: Handle if these aren't in the right format
     event.call_start =  timezone.localize(datetime.strptime(call_start, date_format), is_dst=None)
     event.enqueue_time = timezone.localize(datetime.strptime(enqueue_time, date_format), is_dst=None)
     event.dequeue_time = timezone.localize(datetime.strptime(dequeue_time, date_format), is_dst=None)
