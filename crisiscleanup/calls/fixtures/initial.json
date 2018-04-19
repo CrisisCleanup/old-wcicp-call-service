@@ -58,14 +58,15 @@
     },
     {
         "model": "calls.user",
-        "pk": "2c275d3f-c8cc-49cb-ac8c-73fd123069ba",
+        "pk": 1,
         "fields": {
             "willing_to_receive_calls": "True",
             "willing_to_be_call_hero": "True",
             "last_used_phone_number": "888-888-8888",
             "name": "Sean Fisher",
             "gateway": "9ce917c1-f22c-41c8-8acd-fce6db67972c",
-            "languages": [ 1, 2 ]
+            "languages": [ 1, 2 ],
+            "cc_id": 7748
         }
     },
     {

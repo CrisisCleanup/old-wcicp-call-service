@@ -34,8 +34,8 @@ class User(models.Model):
         regex=r'^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
     # fields
-    # Id comes from a seperate API, so overriding the default here
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
+    # ID in the Crisis Cleanup user service
+    cc_id = models.IntegerField(null=False, blank=False)
     # Willing to receive calls related to disasters associated to their organization
     willing_to_receive_calls = models.BooleanField(default=False)
     # Hero helps with all calls outside of organization disasters
@@ -60,6 +60,9 @@ class User(models.Model):
 
     class Meta:
         db_table = 'user'
+        indexes = [
+            models.Index(fields=['cc_id'], name='IX_user_cc_id')
+        ]
 
     def __str__(self):
         return str(self.name)
