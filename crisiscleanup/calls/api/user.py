@@ -16,6 +16,7 @@ class UserViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
     search_fields = ()
     filter_fields = ("willing_to_be_call_center_support",)
+    lookup_field = 'cc_id'
 
     @list_route()
     def test_celery(self, request):
@@ -50,7 +51,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response({'status': 'training_completed set'})
 
     @detail_route(methods=['get'])
-    def get_detail(self, request, pk=None):
+    def get_detail(self, request, cc_id=None):
         user = self.get_object()
         serializedData = self.get_serializer(user).data;
         #Calculate whether or not the user's training and read articles are up-to-date

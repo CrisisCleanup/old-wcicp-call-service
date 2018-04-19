@@ -11,5 +11,5 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'willing_to_receive_calls', 'willing_to_be_call_hero', 'willing_to_be_call_center_support',
                   'willing_to_be_pin_hero', 'last_used_phone_number', 'last_used_state', 'last_used_gateway',
-                  'read_articles', 'training_completed', 'name', 'languages')
+                  'read_articles', 'training_completed', 'name', 'languages', 'cc_id')
         depth = 1
