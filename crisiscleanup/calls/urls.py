@@ -13,7 +13,7 @@ from crisiscleanup.calls.api.language import LanguageViewSet
 
 router = routers.SimpleRouter()
 router.register(r'calls', CallViewSet)
-router.register(r'users', UserViewSet)
+router.register(r'call-users', UserViewSet)
 router.register(r'callers', CallerViewSet)
 router.register(r'gateways', GatewayViewSet)
 router.register(r'articles', ArticleViewSet)
