@@ -45,9 +45,12 @@ def connect_first_inbound(request):
     event.uii = request.POST.get('uii', "")
 
     # TODO: Handle if these aren't in the right format
-    event.call_start =  timezone.localize(datetime.strptime(call_start, date_format), is_dst=None)
-    event.enqueue_time = timezone.localize(datetime.strptime(enqueue_time, date_format), is_dst=None)
-    event.dequeue_time = timezone.localize(datetime.strptime(dequeue_time, date_format), is_dst=None)
+    if call_start:
+        event.call_start =  timezone.localize(datetime.strptime(call_start, date_format), is_dst=None)
+    if (enqueue_time):
+        event.enqueue_time = timezone.localize(datetime.strptime(enqueue_time, date_format), is_dst=None)
+    if (dequeue_time):
+        event.dequeue_time = timezone.localize(datetime.strptime(dequeue_time, date_format), is_dst=None)
     event.queue_duration = request.POST.get('queue_duration', 0) or 0
     event.ani = request.POST.get('ani', "")
     event.dnis = request.POST.get('dnis', "")
