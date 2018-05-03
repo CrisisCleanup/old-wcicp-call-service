@@ -104,18 +104,20 @@ class TrainingQuestion(models.Model):
         return str(self.question)
 
 class Call(models.Model):
+    INBOUND = 'INBOUND'
     UNKNOWN = 'UNKNOWN'
     INBOUND_MISSED = 'INBOUND_MISSED'
     INBOUND_ANSWERED = 'INBOUND_ANSWERED'
     OUTBOUND = 'OUTBOUND'
     CALL_TYPE_CHOICES = (
+        (INBOUND, 'Inbound'),
         (UNKNOWN, 'Unknown'),
         (INBOUND_MISSED, 'Inbound Missed'),
         (INBOUND_ANSWERED, 'Inbound Answered'),
         (OUTBOUND, 'Outbound')
     )
-    call_start = models.DateTimeField()
-    duration = models.PositiveIntegerField()
+    call_start = models.DateTimeField(null=True, blank=True)
+    duration = models.PositiveIntegerField(null=True, blank=True)
     # The person calling in to CC or who we are calling
     caller = models.ForeignKey('Caller', null=True, blank=True)
     gateway = models.ForeignKey('Gateway')
