@@ -193,9 +193,9 @@ class ConnectFirstEvent(models.Model):
     )
 
     uii = models.CharField(max_length=30) # CF manual specifies these are 30 chars
-    call_start = models.DateTimeField()
-    enqueue_time = models.DateTimeField()
-    dequeue_time = models.DateTimeField()
+    call_start = models.DateTimeField(null=True, blank=True)
+    enqueue_time = models.DateTimeField(null=True, blank=True)
+    dequeue_time = models.DateTimeField(null=True, blank=True)
     queue_duration = models.PositiveIntegerField(null=True, blank=True)
     ani = models.CharField(max_length=30)
     dnis = models.CharField(max_length=30)
