@@ -221,6 +221,10 @@ class ConnectFirstEvent(models.Model):
         return str(self.id)
 
     def save_call(self):
+        call = Call.objects.filter(external_id=self.uii).first()
+        if call is None:
+            call = Call(external_id=self.uii)
+
         caller = Caller.objects.filter(phone_number=self.ani).first()
         if caller is None:
             caller = Caller.objects.create(phone_number=self.ani)
@@ -230,14 +234,11 @@ class ConnectFirstEvent(models.Model):
             language = Language.objects.filter(code="en").first()
             gateway = Gateway.objects.create(external_gateway_id=self.gate_id, name=self.gate_name, language=language)
 
-        call = Call(
-            call_start = self.call_start,
-            duration = self.duration,
-            caller = caller,
-            gateway = gateway,
-            ccu_number = self.dnis,
-            external_id = self.uii
-        )
+        call.call_start = self.call_start
+        call.duration = self.duration
+        call.caller = caller
+        call.gateway = gateway
+        call.ccu_number = self.dnis
 
         if (self.call_result == ConnectFirstEvent.ABANDON or self.call_result == ConnectFirstEvent.DEFLECTED):
             call.call_type = Call.INBOUND_MISSED
