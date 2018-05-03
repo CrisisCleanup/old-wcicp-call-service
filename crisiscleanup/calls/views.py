@@ -33,18 +33,15 @@ def connect_first_inbound(request):
     if uname != username or passwd != password or uname == None or passwd == None:
         raise PermissionDenied
 
-    min_date = '0001-01-01 00:00:00'
     date_format = '%Y-%m-%d %H:%M:%S'
     timezone = pytz.timezone('America/Chicago')
-    call_start = request.POST.get('call_start', min_date)
-    enqueue_time = request.POST.get('enqueue_time', min_date)
-    dequeue_time = request.POST.get('dequeue_time', min_date)
+
+    call_start = request.POST.get('call_start')
+    enqueue_time = request.POST.get('enqueue_time')
+    dequeue_time = request.POST.get('dequeue_time')
 
     event = ConnectFirstEvent()
-
     event.uii = request.POST.get('uii', "")
-
-    # TODO: Handle if these aren't in the right format
     if call_start:
         event.call_start =  timezone.localize(datetime.strptime(call_start, date_format), is_dst=None)
     if (enqueue_time):
