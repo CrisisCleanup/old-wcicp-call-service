@@ -68,4 +68,4 @@ def connect_first_inbound(request):
     event.save()
     event.save_call()
 
-    return HttpResponse(serializers.serialize("json", [event]))
+    return HttpResponse(status=201) # To return the model for debugging purposes, return HttpResponse(serializers.serialize("json", [event]))
