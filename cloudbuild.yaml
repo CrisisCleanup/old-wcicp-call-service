@@ -4,12 +4,12 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args:
   - 'build'
-  - '--cache-from'
-  - 'gcr.io/$PROJECT_ID/wcicp-call-service'
+#  - '--cache-from'
+#  - 'gcr.io/$PROJECT_ID/wcicp-call-service'
   - '-f'
   - './compose/kube/django/Dockerfile'
-#  - '-t'
-#  - 'gcr.io/$PROJECT_ID/wcicp-call-service'
+  - '-t'
+  - 'gcr.io/$PROJECT_ID/wcicp-call-service'
   - '.'
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/$PROJECT_ID/wcicp-call-service']
