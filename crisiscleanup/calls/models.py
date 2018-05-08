@@ -47,7 +47,7 @@ class User(models.Model):
     last_used_phone_number = models.CharField(
         validators=[phone_regex], max_length=15, blank=True)
     last_used_gateway = models.ForeignKey(
-        'Gateway', on_delete=models.SET_NULL, null=True)
+        'Gateway', on_delete=models.SET_NULL, null=True, blank=True)
     last_used_state = models.CharField(max_length=50, blank=True, null=True)
     # A list of all articles which the user has read
     read_articles = models.ManyToManyField('Article', blank=True)
