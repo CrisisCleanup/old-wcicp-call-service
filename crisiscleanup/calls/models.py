@@ -137,7 +137,7 @@ class Call(models.Model):
         db_table = 'call'
 
     def __str__(self):
-        return 'Call to/from {} at {}'.format(caller.phone_number, call_start)
+        return 'Call to/from {} at {}'.format(self.caller.phone_number, self.call_start)
 
 class CallWorksite(models.Model):
     """Records which worksite(s) a call was about
