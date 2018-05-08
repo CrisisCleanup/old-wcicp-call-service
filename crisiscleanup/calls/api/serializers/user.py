@@ -5,7 +5,7 @@ class UserSerializer(serializers.ModelSerializer):
     read_articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     training_completed = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     languages = serializers.PrimaryKeyRelatedField(many=True, queryset=Language.objects.all())
-    last_used_gateway = serializers.PrimaryKeyRelatedField(queryset=Gateway.objects)
+    last_used_gateway = serializers.PrimaryKeyRelatedField(queryset=Gateway.objects, required=False, allow_null=True)
 
     class Meta:
         model = User
