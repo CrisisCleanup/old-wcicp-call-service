@@ -1,11 +1,11 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['pull', 'gcr.io/$PROJECT_ID/wcicp-call-service']
+#- name: 'gcr.io/cloud-builders/docker'
+#  args: ['pull', 'gcr.io/$PROJECT_ID/wcicp-call-service']
 - name: 'gcr.io/cloud-builders/docker'
   args:
   - 'build'
-  - '--cache-from'
-  - 'gcr.io/$PROJECT_ID/wcicp-call-service'
+#  - '--cache-from'
+#  - 'gcr.io/$PROJECT_ID/wcicp-call-service'
   - '-f'
   - './compose/kube/django/Dockerfile'
   - '-t'
@@ -14,12 +14,7 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/$PROJECT_ID/wcicp-call-service']
 - name: 'gcr.io/cloud-builders/kubectl'
-  args: ['delete', 'pods', '--namespace=dev', '-lapp=wcicp-call-service']
-  env:
-  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=ccu-1'
-- name: 'gcr.io/cloud-builders/kubectl'
-  args: ['delete', 'pods', '--namespace=staging', '-lapp=wcicp-call-service']
+  args: ['delete', 'pods', '-lapp=wcicp-call-service']
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
   - 'CLOUDSDK_CONTAINER_CLUSTER=ccu-1'
